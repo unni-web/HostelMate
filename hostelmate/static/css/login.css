@@ -1,0 +1,200 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #111;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  background: #fff;
+}
+
+/* HERO SECTION */
+.hero {
+  flex: 1;
+  background: url("/static/images/hostel-hero.jpg") center/cover no-repeat;
+  position: relative;
+}
+
+.overlay {
+  background: rgba(40, 25, 20, 0.55);
+  color: #fff;
+  height: 100%;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.brand .logo {
+  background: #ff7a45;
+  padding: 10px;
+  border-radius: 12px;
+  margin-right: 10px;
+}
+
+.hero h1 {
+  font-size: 44px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 16px;
+  max-width: 420px;
+  opacity: 0.9;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.features span {
+  background: rgba(255,255,255,0.15);
+  padding: 10px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  width: 300px;
+
+}
+
+blockquote {
+  font-style: italic;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* LOGIN SECTION */
+.login {
+  width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-icon {
+  background: #fff2ec;
+  color: #ff7a45;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.login-box h2 {
+  font-size: 28px;
+  text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+  color: #777;
+  margin: 8px 0 24px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .eye {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.options a {
+  color: #ff7a45;
+  text-decoration: none;
+}
+
+button[type="submit"] {
+  width: 100%;
+  background: #ff7a45;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.divider {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin: 24px 0 16px;
+}
+
+.social {
+  display: flex;
+  gap: 12px;
+}
+
+.social button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.signup {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.signup a {
+  color: #ff7a45;
+  text-decoration: none;
+}

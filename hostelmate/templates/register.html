@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HostelMate – Register</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Left Hero Section -->
+        <div class="hero">
+            <div class="overlay">
+                <div class="brand">
+                    <div class="logo">H</div>
+                    <span>HostelMate</span>
+                </div>
+
+                <h1>Start Managing Your Hostel Smarter</h1>
+                <p>
+                    Create your account and gain full control over bookings,
+                    rooms, and guest management in one powerful platform.
+                </p>
+
+                <div class="features">
+                    <span>⚡ Fast Setup</span>
+                    <span>🏢 Multi-Room Support</span>
+                    <span>📊 Real-time Insights</span>
+                    <span>🔐 Secure Data</span>
+                </div>
+
+                <blockquote>
+                    “Getting started with HostelHub took less than 10 minutes.
+                    Our staff loved it from day one.”
+                    <br /><strong>— Daniel Cooper, Operations Lead</strong>
+                </blockquote>
+            </div>
+        </div>
+
+        <!-- Right Register Section -->
+        <div class="register">
+            <div class="register-box">
+                <h2>Create Account</h2>
+                <p class="subtitle">Start managing your hostel today</p>
+
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <!-- Role Toggle -->
+                    <div class="role-toggle">
+                        <button type="button" class="role-btn active" onclick="setRole('user')">
+                            User
+                        </button>
+                        <button type="button" class="role-btn" onclick="setRole('owner')">
+                            Owner
+                        </button>
+                    </div>
+
+                    <input type="hidden" name="role" id="role" value="user">
+
+                    <label>Full Name</label>
+                    <input type="text" name="username" placeholder="Username" />
+
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="email" />
+
+                    <label>Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" name="password" placeholder="Create a password" />
+                    </div>
+
+                    <label>Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" name="cnf_password" placeholder="Confirm your password" />
+                    </div>
+
+                    <button type="submit">Create Account</button>
+
+                    <p class="signin">
+                        Already have an account? <a href="../login">Sign In</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function setRole(role) {
+            document.getElementById("role").value = role;
+
+            document.querySelectorAll(".role-btn").forEach(btn =>
+                btn.classList.remove("active")
+            );
+
+            role === "user"
+                ? document.querySelectorAll(".role-btn")[0].classList.add("active")
+                : document.querySelectorAll(".role-btn")[1].classList.add("active");
+        }
+    </script>
+
+</body>
+
+</html>

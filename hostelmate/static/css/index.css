@@ -1,0 +1,341 @@
+/* ================= GLOBAL ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f4f6f8;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  background: #ededed;
+  padding: 14px 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.logo .highlight {
+  color: #20b2aa;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #4b5563;
+  font-size: 15px;
+}
+
+.nav-links a:hover {
+  color: #1f2937;
+}
+
+.nav-actions .signup {
+  background: linear-gradient(135deg, #22a6a1, #34d399);
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* ================= ACCOUNT SIDEBAR ================= */
+.account-sidebar {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  transition: right 0.3s ease;
+  z-index: 1001;
+}
+
+.account-sidebar.active {
+  right: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.account-info p {
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.logout-btn {
+  display: block;
+  margin-top: 30px;
+  background: #ef4444;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+/* ================= OVERLAY ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ================= HERO ================= */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.35), rgba(255,255,255,0)),
+    linear-gradient(to bottom, rgba(255,255,255,0) 40%, #fff 90%),
+    url("/static/images/hero-bg.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-content {
+  color: #fff;
+  max-width: 900px;
+  padding: 0 20px;
+}
+
+.hero-content h1 {
+  font-size: 52px;
+  margin-bottom: 16px;
+}
+
+.hero-content h1 span {
+  color: #22a6a1;
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 32px;
+}
+
+/* ================= TOGGLE ================= */
+.gender-toggle {
+  display: inline-flex;
+  background: #eaf6f5;
+  padding: 6px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #555;
+  transition: 0.3s;
+}
+
+.toggle-btn.active {
+  background: #22a6a1;
+  color: #fff;
+}
+
+.gender-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* ================= SEARCH ================= */
+.search-card {
+  background: #fff;
+  padding: 2px;
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+  max-width: 760px;
+  margin: auto;
+}
+
+.search-box {
+  display: flex;
+  gap: 12px;
+  background: #f5f7f9;
+  border-radius: 18px;
+  padding: 10px;
+}
+
+.search-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 14px;
+  padding: 0 14px;
+}
+
+.search-input input {
+  border: none;
+  outline: none;
+  padding: 14px;
+  width: 100%;
+}
+
+.icon {
+  display: flex;
+}
+
+.location-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #22a6a1;
+  stroke-width: 2;
+  fill: none;
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #22a6a1;
+  border: none;
+  color: #fff;
+  padding: 0 28px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.search-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+/* ================= FEATURES ================= */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 36px;
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+
+.feature-card {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: 80px;
+  padding-left: 14px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+  cursor: pointer;
+}
+
+.feature-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-icon {
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(135deg, #22a6a1, #34d399);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: #fff;
+  stroke-width: 1.8;
+}
+
+.feature-text h4 {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.feature-text p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* HOVER */
+.feature-card:hover {
+  transform: translateY(-6px);
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.08);
+}
+
+.feature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #22a6a1, #34d399);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.feature-card:hover::after {
+  opacity: 0.12;
+}
