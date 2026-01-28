@@ -24,9 +24,9 @@
 
       <!-- Center Links -->
       <ul class="nav-links">
-        <li><a href="#">Find Hostels</a></li>
-        <li><a href="#">List Your Property</a></li>
+        <li><a href="../">Find Hostels</a></li>
         <li><a href="#">About</a></li>
+        <li><a href="../requests/">Requests</a></li>
       </ul>
 
       <!-- Right Actions -->
@@ -88,29 +88,30 @@
       </p>
 
       <!-- Toggle -->
-      <div class="gender-toggle">
-        <button class="toggle-btn active" onclick="setGender('gents')">
-          <svg class="gender-icon" viewBox="0 0 24 24" fill="none">
+      <div class="gender-toggle-pill">
+        <a href="?category=gents" class="pill-btn {% if selected_category == 'gents' %}active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="7" r="4"></circle>
             <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
           </svg>
           Gents
-        </button>
+        </a>
 
-        <button class="toggle-btn" onclick="setGender('ladies')">
-          <svg class="gender-icon" viewBox="0 0 24 24" fill="none">
+        <a href="?category=ladies" class="pill-btn {% if selected_category == 'ladies' %}active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="7" r="4"></circle>
             <path d="M8 21v-2a4 4 0 0 1 8 0v2"></path>
           </svg>
           Ladies
-        </button>
+        </a>
       </div>
       <!-- Search Card -->
       <div class="search-card">
 
 
         <!-- Search -->
-        <div class="search-box">
+        <form method="GET" action="{% url 'search_hostels' %}" class="search-box">
+
           <div class="search-input">
             <span class="icon">
               <svg class="location-icon" viewBox="0 0 24 24" fill="none">
@@ -118,30 +119,27 @@
                 <circle cx="12" cy="10" r="2.5"></circle>
               </svg>
             </span>
-            <input type="text" placeholder="Search location (e.g., Ernakulam , Kottayam ...)" />
+
+            <input type="text" name="location" placeholder="Search location (e.g., Ernakulam, Kottayam...)" required />
           </div>
-          <button class="search-btn">
+
+          <!-- Preserve category -->
+          <input type="hidden" name="category" value="{{ selected_category }}">
+
+          <button type="submit" class="search-btn">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none">
               <circle cx="11" cy="11" r="7"></circle>
               <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
             </svg>
             Search
           </button>
-        </div>
+
+        </form>
+
 
       </div>
     </div>
   </section>
-  <script>
-    function setGender(type) {
-      const buttons = document.querySelectorAll(".toggle-btn");
-      buttons.forEach(btn => btn.classList.remove("active"));
-
-      type === "gents"
-        ? buttons[0].classList.add("active")
-        : buttons[1].classList.add("active");
-    }
-  </script>
 
   <section class="features">
     <div class="feature-card">
@@ -210,7 +208,120 @@
     featureCards.forEach(card => observer.observe(card));
   </script>
 
+  <section class="hostel-section">
 
+    <div class="section-header">
+      <div>
+        <h2>{{ selected_category|title }} Hostels</h2>
+        <p>{{ hostels.count }} hostels found</p>
+      </div>
+
+      <div class="gender-toggle-pill">
+        <a href="?category=gents" class="pill-btn {% if selected_category == 'gents' %}active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+          </svg>
+          Gents
+        </a>
+
+        <a href="?category=ladies" class="pill-btn {% if selected_category == 'ladies' %}active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M8 21v-2a4 4 0 0 1 8 0v2"></path>
+          </svg>
+          Ladies
+        </a>
+      </div>
+
+    </div>
+
+    <div class="hostel-grid">
+      {% for hostel in hostels %}
+      <a href="{% url 'hostel_detail' hostel.id %}" class="hostel-link">
+        <div class="hostel-card">
+          <div class="hostel-card">
+
+            <div class="card-image">
+              <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}">
+
+              <span class="badge">{{ hostel.category|title }}</span>
+
+              <!-- OPTIONAL rating (static for now) -->
+              <div class="rating">
+                ⭐ 4.7 <span>(203)</span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <h3>{{ hostel.name }}</h3>
+
+              <p class="location">
+                📍 {{ hostel.location }}
+              </p>
+
+              <div class="amenities">
+                <span>📶 WiFi</span>
+                <span>🍽 Food</span>
+              </div>
+
+              <div class="card-footer">
+                <div class="price">
+                  ₹{{ hostel.price }}<span>/month</span>
+                </div>
+
+                {% if user.is_authenticated %}
+
+                {% if hostel.request_status == 'pending' %}
+                <button class="status-btn pending">⏳ Pending</button>
+
+                {% elif hostel.request_status == 'accepted' %}
+                <button class="status-btn accepted">✅ Accepted</button>
+
+                {% else %}
+                <form method="POST" action="{% url 'send_request' hostel.id %}">
+                  {% csrf_token %}
+                  <button class="view-btn">Request Bed</button>
+                </form>
+                {% endif %}
+
+                {% else %}
+                <a href="{% url 'login' %}" class="view-btn">Login</a>
+                {% endif %}
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </a>
+
+
+      {% endfor %}
+
+      <div class="hostel-grid">
+        {% for hostel in hostels %}
+        {% empty %}
+        <p>No hostels available.</p>
+        {% endfor %}
+      </div>
+
+
+  </section>
+
+
+  <script>
+    // Save scroll position
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("scrollY", window.scrollY);
+    });
+
+    // Restore scroll position
+    window.addEventListener("load", () => {
+      const y = localStorage.getItem("scrollY");
+      if (y) window.scrollTo(0, y);
+    });
+  </script>
 
 </body>
 

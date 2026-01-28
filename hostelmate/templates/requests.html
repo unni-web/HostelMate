@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Requests</title>
+
+    <link rel="stylesheet" href="{% static 'css/requests.css' %}">
+</head>
+
+<body>
+<!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="nav-container">
+
+      <!-- Logo -->
+      <div class="logo">
+        <span>Hostel<span class="highlight">Mate</span></span>
+      </div>
+
+      <!-- Center Links -->
+      <ul class="nav-links">
+        <li><a href="../">Find Hostels</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="../requests/">Requests</a></li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="nav-actions">
+        <a href="javascript:void(0)" class="signup" onclick="openAccount()">Account</a>
+      </div>
+
+    </div>
+  </nav>
+  <!-- ================= NAVBAR END ================= -->
+
+
+  <!-- ================= ACCOUNT SIDEBAR ================= -->
+  <div id="accountSidebar" class="account-sidebar">
+    <div class="sidebar-header">
+      <h3>My Account</h3>
+      <button class="close-btn" onclick="closeAccount()">×</button>
+    </div>
+
+    <div class="account-info">
+      <p><strong>Username:</strong> {{ request.user.username }}</p>
+      <p><strong>Email:</strong> {{ request.user.email }}</p>
+    </div>
+
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+  </div>
+  <!-- ================= ACCOUNT SIDEBAR END ================= -->
+
+
+  <!-- ================= OVERLAY ================= -->
+  <div id="overlay" class="overlay" onclick="closeAccount()"></div>
+  <!-- ================= OVERLAY END ================= -->
+
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    function openAccount() {
+      document.getElementById("accountSidebar").classList.add("active");
+      document.getElementById("overlay").classList.add("active");
+    }
+
+    function closeAccount() {
+      document.getElementById("accountSidebar").classList.remove("active");
+      document.getElementById("overlay").classList.remove("active");
+    }
+  </script>
+  <!-- ================= JAVASCRIPT END ================= -->
+
+    <h2>My Booking Requests</h2>
+
+    {% for req in bookings %}
+    <div class="request-card">
+
+        <!-- LEFT: IMAGE -->
+        <div class="request-image">
+            {% if req.hostel.image %}
+            <img src="{{ req.hostel.image.url }}" alt="{{ req.hostel.name }}">
+            {% else %}
+            <img src="{% static 'images/default-hostel.jpg' %}" alt="No image">
+            {% endif %}
+        </div>
+
+        <!-- MIDDLE: DETAILS -->
+        <div class="request-info">
+            <h3>{{ req.hostel.name }}</h3>
+            <p>📍 {{ req.hostel.location }}</p>
+        </div>
+
+        <!-- RIGHT: STATUS -->
+        <div class="request-status">
+            {% if req.status == 'pending' %}
+            <span class="status pending">⏳ Pending</span>
+            {% elif req.status == 'accepted' %}
+            <span class="status accepted">✅ Accepted</span>
+            {% else %}
+            <span class="status rejected">❌ Rejected</span>
+            {% endif %}
+        </div>
+
+    </div>
+    {% empty %}
+    <p>No requests yet.</p>
+    {% endfor %}
+
+</body>
+</html>

@@ -2,15 +2,107 @@
 <html lang="en">
 
 <head>
+    {% load static %}
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Owner Dashboard | HostelMate</title>
+    <link rel="stylesheet" href="{% static 'css/owner_dashboard.css' %}">
 </head>
 
 <body>
-    <h1>OWNER DASHBOARD</h1>
 
-    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
- </body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">Hostel<span>Mate</span></div>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </nav>
+
+    <div class="dashboard">
+
+        <!-- ADD HOSTEL -->
+        <section class="card">
+            <h2>Add New Hostel</h2>
+
+            <!-- IMPORTANT: enctype added -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <input type="text" name="name" placeholder="Hostel Name" required>
+
+                <select name="category" required>
+                    <option value="">Category</option>
+                    <option value="gents">Gents</option>
+                    <option value="ladies">Ladies</option>
+                </select>
+
+                <input type="text" name="location" placeholder="Location" required>
+                <input type="number" name="beds" placeholder="Beds Available" required>
+                <input type="number" name="price" placeholder="Price per Bed" required>
+
+                <!-- IMAGE UPLOAD -->
+                <div class="image-upload">
+                    <label>Hostel Image</label>
+                    <input type="file" name="image" accept="image/*" required>
+                </div>
+
+                <button type="submit">Add Hostel</button>
+            </form>
+        </section>
+
+        <!-- MY HOSTELS -->
+        <section class="card">
+            <h2>My Hostels</h2>
+
+            {% for hostel in hostels %}
+            <div class="hostel-item">
+
+                <!-- HOSTEL IMAGE -->
+                <img src="{{ hostel.image.url }}" alt="Hostel Image" class="hostel-img">
+
+                <!-- HOSTEL INFO -->
+                <div class="hostel-info">
+                    <h3>{{ hostel.name }}</h3>
+                    <p>{{ hostel.location }} • {{ hostel.category|title }}</p>
+                    <p>₹ {{ hostel.price }} / bed</p>
+                    <p><strong>Beds:</strong> {{ hostel.beds_available }}</p>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="hostel-actions">
+                    <form method="POST" action="{% url 'update_beds' hostel.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="beds" value="{{ hostel.beds_available }}" min="0">
+                        <button class="update">Update</button>
+                    </form>
+
+                    <a href="{% url 'delete_hostel' hostel.id %}" class="delete">Delete</a>
+                </div>
+
+            </div>
+            {% empty %}
+            <p>No hostels added yet.</p>
+            {% endfor %}
+        </section>
+
+        <!-- BOOKING REQUESTS -->
+        <section class="card">
+            <h2>Booking Requests</h2>
+
+            {% for req in requests %}
+            <div class="request-item">
+                <div>
+                    <strong>{{ req.user.username }}</strong>
+                    <p>{{ req.hostel.name }}</p>
+                </div>
+
+                <a href="{% url 'accept_request' req.id %}" class="accept">Accept</a>
+            </div>
+            {% empty %}
+            <p>No pending requests</p>
+            {% endfor %}
+        </section>
+
+    </div>
+
+</body>
 
 </html>

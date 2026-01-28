@@ -17,13 +17,27 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index),
+    path('',views.index , name='index'),
     path('login/',views.login_user),
     path('register/',views.register_user),
     path('logout/',views.logout_user , name="logout"),
     path('owner_dashboard/',views.owner_dashboard),
+    path('hostel/delete/<int:hostel_id>/', views.delete_hostel, name='delete_hostel'),
+    path('hostel/update/<int:hostel_id>/', views.update_beds, name='update_beds'),
+    path('request/<int:hostel_id>/', views.send_request, name='send_request'),
+    path('request/accept/<int:request_id>/', views.accept_request, name='accept_request'),
+    path('requests/', views.user_requests, name='user_requests'),
+    path('search/', views.search_hostels, name='search_hostels'),
+     path('hostel/<int:hostel_id>/', views.hostel_detail, name='hostel_detail'),
+
     
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

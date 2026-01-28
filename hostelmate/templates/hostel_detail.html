@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>{{ hostel.name }} | HostelMate</title>
+    <link rel="stylesheet" href="{% static 'css/hostel_detail.css' %}">
+</head>
+
+<body>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="nav-container">
+
+            <!-- Logo -->
+            <div class="logo">
+                <span>Hostel<span class="highlight">Mate</span></span>
+            </div>
+
+            <!-- Center Links -->
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Find Hostels</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="{% url 'user_requests' %}">Requests</a></li>
+            </ul>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <a href="javascript:void(0)" class="signup" onclick="openAccount()">Account</a>
+            </div>
+
+        </div>
+    </nav>
+    <!-- ================= NAVBAR END ================= -->
+
+
+    <!-- ================= ACCOUNT SIDEBAR ================= -->
+    <div id="accountSidebar" class="account-sidebar">
+        <div class="sidebar-header">
+            <h3>My Account</h3>
+            <button class="close-btn" onclick="closeAccount()">×</button>
+        </div>
+
+        <div class="account-info">
+            <p><strong>Username:</strong> {{ request.user.username }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+        </div>
+
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+    <!-- ================= ACCOUNT SIDEBAR END ================= -->
+
+
+    <!-- ================= OVERLAY ================= -->
+    <div id="overlay" class="overlay" onclick="closeAccount()"></div>
+    <!-- ================= OVERLAY END ================= -->
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        function openAccount() {
+            document.getElementById("accountSidebar").classList.add("active");
+            document.getElementById("overlay").classList.add("active");
+        }
+
+        function closeAccount() {
+            document.getElementById("accountSidebar").classList.remove("active");
+            document.getElementById("overlay").classList.remove("active");
+        }
+    </script>
+    <!-- ================= JAVASCRIPT END ================= -->
+
+    <div class="detail-container">
+        
+        <!-- IMAGE -->
+        <div class="detail-image">
+            <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}">
+             <!-- ACTION -->
+            <div class="action-area">
+                {% if user.is_authenticated %}
+
+                {% if hostel.request_status == 'pending' %}
+                <button class="status-btn pending">⏳ Pending</button>
+
+                {% elif hostel.request_status == 'accepted' %}
+                <button class="status-btn accepted">✅ Accepted</button>
+
+                {% else %}
+                <form method="POST" action="{% url 'send_request' hostel.id %}">
+                    {% csrf_token %}
+                    <button class="request-btn">Request Bed</button>
+                </form>
+                {% endif %}
+
+                {% else %}
+                <a href="{% url 'login' %}" class="request-btn">Login to Request</a>
+                {% endif %}
+
+                
+            </div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="detail-info">
+            <h1>{{ hostel.name }}</h1>
+            <span class="badge">{{ hostel.category|title }}</span>
+
+            <p class="location">📍 {{ hostel.location }}</p>
+
+            <div class="meta">
+                <span>🛏 Beds Available: {{ hostel.beds_available }}</span>
+                <span>💰 ₹{{ hostel.price }} / month</span>
+            </div>
+
+            <div class="amenities">
+                <span>📶 WiFi</span>
+                <span>🍽 Food</span>
+                <span>🧹 Cleaning</span>
+            </div>
+
+           
+            <div class="map-box">
+                <iframe width="100%" height="300" frameborder="0" style="border-radius:12px" loading="lazy"
+                    allowfullscreen
+                    src="https://www.google.com/maps?q={{ hostel.location|urlencode }}&output=embed">
+                </iframe>
+            </div>
+            <div class="rating">
+                ⭐ {{ hostel.avg_rating|floatformat:1 }}/5
+                <span>({{ hostel.reviews.count }} reviews)</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

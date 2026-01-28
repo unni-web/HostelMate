@@ -1,0 +1,242 @@
+
+/* ================= NAVBAR ================= */
+.navbar {
+  background: #ededed;
+  padding: 14px 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.logo .highlight {
+  color: #20b2aa;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #4b5563;
+  font-size: 15px;
+}
+
+.nav-links a:hover {
+  color: #1f2937;
+}
+
+.nav-actions .signup {
+  background: linear-gradient(135deg, #22a6a1, #34d399);
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* ================= ACCOUNT SIDEBAR ================= */
+.account-sidebar {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  transition: right 0.3s ease;
+  z-index: 1001;
+}
+
+.account-sidebar.active {
+  right: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.account-info p {
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.logout-btn {
+  display: block;
+  margin-top: 30px;
+  background: #ef4444;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+/* ================= OVERLAY ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+/* ================= BASE ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: #f4f6f8;
+  color: #1f2937;
+
+}
+
+/* ================= HEADER ================= */
+h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 700;
+    padding: 40px;
+    padding-bottom: 0;
+
+
+}
+
+/* ================= REQUEST GRID ================= */
+.request-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+}
+
+.request-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* ================= HOSTEL INFO ================= */
+.request-card h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.request-card p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ================= STATUS BADGES ================= */
+.status {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Pending */
+.status.pending {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+/* Accepted */
+.status.accepted {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+/* Rejected */
+.status.rejected {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* ================= EMPTY STATE ================= */
+p {
+  font-size: 16px;
+  color: #6b7280;
+}
+/* ================= REQUEST IMAGE ================= */
+.request-image {
+  width: 120px;
+  height: 90px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.request-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================= REQUEST LAYOUT ================= */
+.request-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.request-info {
+  flex: 1;
+}
+
+.request-status {
+  margin-left: auto;
+}
+
+
+.cardbody{
+    padding: 40px;
+}

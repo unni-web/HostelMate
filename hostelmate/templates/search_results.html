@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+
+<body>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="nav-container">
+
+            <!-- Logo -->
+            <div class="logo">
+                <span>Hostel<span class="highlight">Mate</span></span>
+            </div>
+
+            <!-- Center Links -->
+            <ul class="nav-links">
+                <li><a href="../">Find Hostels</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="../requests/">Requests</a></li>
+            </ul>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <a href="javascript:void(0)" class="signup" onclick="openAccount()">Account</a>
+            </div>
+
+        </div>
+    </nav>
+    <!-- ================= NAVBAR END ================= -->
+
+
+    <!-- ================= ACCOUNT SIDEBAR ================= -->
+    <div id="accountSidebar" class="account-sidebar">
+        <div class="sidebar-header">
+            <h3>My Account</h3>
+            <button class="close-btn" onclick="closeAccount()">×</button>
+        </div>
+
+        <div class="account-info">
+            <p><strong>Username:</strong> {{ request.user.username }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+        </div>
+
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+    <!-- ================= ACCOUNT SIDEBAR END ================= -->
+
+
+    <!-- ================= OVERLAY ================= -->
+    <div id="overlay" class="overlay" onclick="closeAccount()"></div>
+    <!-- ================= OVERLAY END ================= -->
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        function openAccount() {
+            document.getElementById("accountSidebar").classList.add("active");
+            document.getElementById("overlay").classList.add("active");
+        }
+
+        function closeAccount() {
+            document.getElementById("accountSidebar").classList.remove("active");
+            document.getElementById("overlay").classList.remove("active");
+        }
+    </script>
+    <!-- ================= JAVASCRIPT END ================= -->
+
+    <h2  style="padding-left: 100px; padding-top: 20px; padding-bottom: 20px;" >
+        Results for "{{ location }}" ({{ selected_category|title }})
+    </h2>
+
+    <section class="hostel-section">
+        <div class="hostel-grid">
+
+            {% for hostel in hostels %}
+            <div class="hostel-card">
+
+                <div class="card-image">
+                    <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}">
+                    <span class="badge">{{ hostel.category|title }}</span>
+                </div>
+
+                <div class="card-body">
+                    <h3>{{ hostel.name }}</h3>
+                    <p class="location">📍 {{ hostel.location }}</p>
+
+                    <div class="card-footer">
+                        <div class="price">
+                            ₹{{ hostel.price }}<span>/month</span>
+                        </div>
+
+                        {% if user.is_authenticated %}
+                        {% if hostel.request_status == 'pending' %}
+                        <button class="status-btn pending">⏳ Pending</button>
+                        {% elif hostel.request_status == 'accepted' %}
+                        <button class="status-btn accepted">✅ Accepted</button>
+                        {% else %}
+                        <form method="POST" action="{% url 'send_request' hostel.id %}">
+                            {% csrf_token %}
+                            <button class="view-btn">Request Bed</button>
+                        </form>
+                        {% endif %}
+                        {% else %}
+                        <a href="{% url 'login' %}" class="view-btn">Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            {% empty %}
+            <p>No hostels found in this location.</p>
+            {% endfor %}
+
+        </div>
+    </section>
+
+</body>
+
+</html>
