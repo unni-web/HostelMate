@@ -4,6 +4,11 @@ from django.contrib.auth import authenticate,login,logout
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 
 
 
@@ -17,15 +22,17 @@ def index(request):
     if request.user.is_authenticated:
         user_requests = BookingRequest.objects.filter(user=request.user)
 
-        request_map = {
-            req.hostel_id: req.status for req in user_requests
-        }
+    request_map = {
+        req.hostel_id: req for req in user_requests
+    }
 
-        for hostel in hostels:
-            hostel.request_status = request_map.get(hostel.id)
+    for hostel in hostels:
+        booking = request_map.get(hostel.id)
+        hostel.booking = booking
     else:
         for hostel in hostels:
-            hostel.request_status = None
+            hostel.booking = None
+
 
     return render(request, 'index.html', {
         'hostels': hostels,
@@ -156,7 +163,7 @@ def send_request(request, hostel_id):
         defaults={'status': 'pending'}
     )
 
-    return redirect(index)
+    return redirect('hostel_detail', hostel_id=hostel.id)
 
 
 
@@ -219,15 +226,103 @@ def hostel_detail(request, hostel_id):
         Avg("rating")
     )["rating__avg"] or 0
 
-    hostel.request_status = None
+    booking = None
     if request.user.is_authenticated:
         booking = BookingRequest.objects.filter(
             hostel=hostel,
             user=request.user
         ).first()
-        if booking:
-            hostel.request_status = booking.status
 
     return render(request, 'hostel_detail.html', {
-        'hostel': hostel
+        'hostel': hostel,
+        'booking': booking
     })
+
+@login_required
+def pay_advance(request, booking_id):
+    booking = BookingRequest.objects.get(
+        id=booking_id,
+        user=request.user,
+        status='accepted'
+    )
+
+    # STEP 1: Show amount entry page
+    if request.method == "GET":
+        return render(request, "enter_advance.html", {
+            "booking": booking
+        })
+
+    # STEP 2: Handle payment
+    if request.method == "POST":
+        amount = int(request.POST.get("amount")) * 100  # rupees → paise
+
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+        )
+
+        order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": "1"
+        })
+
+        return render(request, "payment.html", {
+            "order": order,
+            "booking": booking,
+            "razorpay_key": settings.RAZORPAY_KEY_ID,
+            "amount": amount
+        })
+
+
+
+@csrf_exempt
+def payment_success(request):
+    data = json.loads(request.body)
+
+    booking = BookingRequest.objects.get(id=data["booking_id"])
+    booking.is_paid = True
+    booking.save()
+
+    return redirect("hostel_detail", hostel_id=booking.hostel.id)
+
+
+@login_required
+def owner_payments(request):
+    if not request.user.is_staff:
+        return redirect('index')
+
+    payments = BookingRequest.objects.filter(
+        hostel__owner=request.user,
+        status='accepted'
+    ).select_related('hostel', 'user')
+
+    return render(request, 'owner_payments.html', {
+        'payments': payments
+    })
+
+@login_required
+def owner_hostels(request):
+    if not request.user.is_staff:
+        return redirect(index)
+
+    hostels = Hostel.objects.filter(owner=request.user)
+    return render(request, "owner_hostels.html", {
+        "hostels": hostels
+    })
+
+
+@login_required
+def owner_requests(request):
+    if not request.user.is_staff:
+        return redirect(index)
+
+    requests = BookingRequest.objects.filter(
+        hostel__owner=request.user
+    )
+
+    return render(request, "owner_requests.html", {
+        "requests": requests
+    })
+
+def about(request):
+    return render(request, "about.html")

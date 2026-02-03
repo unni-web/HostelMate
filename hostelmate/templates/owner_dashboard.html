@@ -11,10 +11,18 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="logo">Hostel<span>Mate</span></div>
+  <nav class="navbar">
+    <div class="logo">Hostel<span>Mate</span></div>
+
+    <div class="nav-links">
+        <a href="{% url 'owner_dashboard' %}">Dashboard</a>
+        <a href="{% url 'owner_hostels' %}">My Hostels</a>
+        <a href="{% url 'owner_payments' %}">Payments</a>
         <a href="{% url 'logout' %}" class="logout">Logout</a>
-    </nav>
+    </div>
+</nav>
+
+
 
     <div class="dashboard">
 
@@ -48,40 +56,7 @@
             </form>
         </section>
 
-        <!-- MY HOSTELS -->
-        <section class="card">
-            <h2>My Hostels</h2>
-
-            {% for hostel in hostels %}
-            <div class="hostel-item">
-
-                <!-- HOSTEL IMAGE -->
-                <img src="{{ hostel.image.url }}" alt="Hostel Image" class="hostel-img">
-
-                <!-- HOSTEL INFO -->
-                <div class="hostel-info">
-                    <h3>{{ hostel.name }}</h3>
-                    <p>{{ hostel.location }} • {{ hostel.category|title }}</p>
-                    <p>₹ {{ hostel.price }} / bed</p>
-                    <p><strong>Beds:</strong> {{ hostel.beds_available }}</p>
-                </div>
-
-                <!-- ACTIONS -->
-                <div class="hostel-actions">
-                    <form method="POST" action="{% url 'update_beds' hostel.id %}">
-                        {% csrf_token %}
-                        <input type="number" name="beds" value="{{ hostel.beds_available }}" min="0">
-                        <button class="update">Update</button>
-                    </form>
-
-                    <a href="{% url 'delete_hostel' hostel.id %}" class="delete">Delete</a>
-                </div>
-
-            </div>
-            {% empty %}
-            <p>No hostels added yet.</p>
-            {% endfor %}
-        </section>
+        
 
         <!-- BOOKING REQUESTS -->
         <section class="card">

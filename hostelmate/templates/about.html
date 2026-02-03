@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About Us | HostelMate</title>
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="nav-container">
+
+            <!-- Logo -->
+            <div class="logo">
+                <span>Hostel<span class="highlight">Mate</span></span>
+            </div>
+
+            <!-- Center Links -->
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Find Hostels</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="{% url 'user_requests' %}">Requests</a></li>
+            </ul>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <a href="javascript:void(0)" class="signup" onclick="openAccount()">Account</a>
+            </div>
+
+        </div>
+    </nav>
+    <!-- ================= NAVBAR END ================= -->
+
+
+    <!-- ================= ACCOUNT SIDEBAR ================= -->
+    <div id="accountSidebar" class="account-sidebar">
+        <div class="sidebar-header">
+            <h3>My Account</h3>
+            <button class="close-btn" onclick="closeAccount()">×</button>
+        </div>
+
+        <div class="account-info">
+            <p><strong>Username:</strong> {{ request.user.username }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+        </div>
+
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+    <!-- ================= ACCOUNT SIDEBAR END ================= -->
+
+
+    <!-- ================= OVERLAY ================= -->
+    <div id="overlay" class="overlay" onclick="closeAccount()"></div>
+    <!-- ================= OVERLAY END ================= -->
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        function openAccount() {
+            document.getElementById("accountSidebar").classList.add("active");
+            document.getElementById("overlay").classList.add("active");
+        }
+
+        function closeAccount() {
+            document.getElementById("accountSidebar").classList.remove("active");
+            document.getElementById("overlay").classList.remove("active");
+        }
+    </script>
+    <!-- ================= JAVASCRIPT END ================= -->
+
+
+
+
+
+    <!-- HERO -->
+    <section class="about-hero">
+        <h1>About HostelMate</h1>
+        <p>Your trusted companion for finding safe, affordable, and comfortable hostels.</p>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="about-content">
+        <div class="about-card" style="--delay: 0s;">
+            <h2>Who We Are</h2>
+            <p>
+                HostelMate is a modern hostel discovery and booking platform designed to
+                connect students, professionals, and travelers with verified hostel owners.
+            </p>
+        </div>
+
+        <div class="about-card" style="--delay: 0.2s;">
+            <h2>What We Do</h2>
+            <ul>
+                <li>🔍 Find hostels by location & category</li>
+                <li>🛏 Easy booking requests</li>
+                <li>💳 Secure advance payments</li>
+                <li>⭐ Ratings & reviews</li>
+            </ul>
+        </div>
+
+        <div class="about-card" style="--delay: 0.4s;">
+            <h2>Why HostelMate?</h2>
+            <p>
+                We focus on simplicity, transparency, and trust—
+                helping users and owners manage everything effortlessly.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© {{ year|default:2026 }} HostelMate. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

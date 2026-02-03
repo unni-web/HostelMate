@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pay Advance</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ amount }}",
+    "currency": "INR",
+    "name": "HostelMate",
+    "description": "Advance Payment",
+    "order_id": "{{ order.id }}",
+    "handler": function (response){
+        fetch("{% url 'payment_success' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                booking_id: "{{ booking.id }}",
+                razorpay_payment_id: response.razorpay_payment_id
+            })
+        }).then(() => {
+            window.location.href = "{% url 'hostel_detail' booking.hostel.id %}";
+        });
+    }
+};
+
+var rzp1 = new Razorpay(options);
+rzp1.open();
+</script>
+
+</body>
+</html>

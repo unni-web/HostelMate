@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields import CharField
+from app.constants import PaymentStatus
+from django.utils.translation import gettext_lazy as _
+
+
 
 class Hostel(models.Model):
 
@@ -47,10 +52,13 @@ class BookingRequest(models.Model):
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+
+    is_paid = models.BooleanField(default=False)   # 🔥 NEW
     requested_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} → {self.hostel.name}"
+
 
 class HostelReview(models.Model):
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name="reviews")
@@ -61,3 +69,4 @@ class HostelReview(models.Model):
 
     def __str__(self):
         return f"{self.hostel.name} - {self.rating}"
+

@@ -26,14 +26,26 @@ urlpatterns = [
     path('login/',views.login_user),
     path('register/',views.register_user),
     path('logout/',views.logout_user , name="logout"),
-    path('owner_dashboard/',views.owner_dashboard),
+    path('owner_dashboard/',views.owner_dashboard, name='owner_dashboard'),
     path('hostel/delete/<int:hostel_id>/', views.delete_hostel, name='delete_hostel'),
     path('hostel/update/<int:hostel_id>/', views.update_beds, name='update_beds'),
     path('request/<int:hostel_id>/', views.send_request, name='send_request'),
     path('request/accept/<int:request_id>/', views.accept_request, name='accept_request'),
     path('requests/', views.user_requests, name='user_requests'),
     path('search/', views.search_hostels, name='search_hostels'),
-     path('hostel/<int:hostel_id>/', views.hostel_detail, name='hostel_detail'),
+    path('hostel/<int:hostel_id>/', views.hostel_detail, name='hostel_detail'),
+    path('pay/<int:booking_id>/', views.pay_advance, name='pay_advance'),
+    path("pay/<int:booking_id>/", views.pay_advance, name="pay_advance"),
+    path("payment-success/", views.payment_success, name="payment_success"),
+    path("pay-advance/<int:booking_id>/", views.pay_advance, name="pay_advance"),
+    path('owner/payments/', views.owner_payments, name='owner_payments'),
+    path('owner/hostels/', views.owner_hostels, name='owner_hostels'),
+    path('owner/requests/', views.owner_requests, name='owner_requests'),
+    path("about/", views.about, name="about"),
+
+
+
+
 
     
 ]

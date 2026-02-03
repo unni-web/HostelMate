@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Requests</title>
 
-    <link rel="stylesheet" href="{% static 'css/requests.css' %}">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Requests | HostelMate</title>
+
+  <link rel="stylesheet" href="{% static 'css/requests.css' %}">
 </head>
 
 <body>
-<!-- ================= NAVBAR ================= -->
+
+  <!-- ================= NAVBAR ================= -->
   <nav class="navbar">
     <div class="nav-container">
 
@@ -21,9 +23,9 @@
 
       <!-- Center Links -->
       <ul class="nav-links">
-        <li><a href="../">Find Hostels</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="../requests/">Requests</a></li>
+        <li><a href="{% url 'index' %}">Find Hostels</a></li>
+        <li><a href="../about/">About</a></li>
+        <li><a href="{% url 'user_requests' %}" class="active">Requests</a></li>
       </ul>
 
       <!-- Right Actions -->
@@ -72,41 +74,61 @@
   </script>
   <!-- ================= JAVASCRIPT END ================= -->
 
+
+  <!-- ================= CONTENT ================= -->
+  <div class="requests-container">
     <h2>My Booking Requests</h2>
 
     {% for req in bookings %}
-    <div class="request-card">
 
-        <!-- LEFT: IMAGE -->
+    <a href="{% url 'hostel_detail' req.hostel.id %}" class="request-link">
+
+      <div class="request-card">
+
+        <!-- IMAGE -->
         <div class="request-image">
-            {% if req.hostel.image %}
-            <img src="{{ req.hostel.image.url }}" alt="{{ req.hostel.name }}">
-            {% else %}
-            <img src="{% static 'images/default-hostel.jpg' %}" alt="No image">
-            {% endif %}
+          {% if req.hostel.image %}
+          <img src="{{ req.hostel.image.url }}" alt="{{ req.hostel.name }}">
+          {% else %}
+          <img src="{% static 'images/default-hostel.jpg' %}" alt="No image">
+          {% endif %}
         </div>
 
-        <!-- MIDDLE: DETAILS -->
+        <!-- DETAILS -->
         <div class="request-info">
-            <h3>{{ req.hostel.name }}</h3>
-            <p>📍 {{ req.hostel.location }}</p>
+          <h3>{{ req.hostel.name }}</h3>
+          <p>📍 {{ req.hostel.location }}</p>
+          <p class="price">₹{{ req.hostel.price }} / month</p>
         </div>
 
-        <!-- RIGHT: STATUS -->
+        <!-- STATUS -->
         <div class="request-status">
-            {% if req.status == 'pending' %}
-            <span class="status pending">⏳ Pending</span>
-            {% elif req.status == 'accepted' %}
-            <span class="status accepted">✅ Accepted</span>
-            {% else %}
-            <span class="status rejected">❌ Rejected</span>
-            {% endif %}
+          {% if req.status == 'pending' %}
+          <span class="status pending">⏳ Pending</span>
+
+          {% elif req.status == 'accepted' %}
+          {% if req.is_paid %}
+          <span class="status paid">✅ Paid</span>
+          {% else %}
+          <span class="status accepted">✅ Accepted</span>
+          {% endif %}
+
+          {% else %}
+          <span class="status rejected">❌ Rejected</span>
+          {% endif %}
         </div>
 
-    </div>
+      </div>
+
+    </a>
+
     {% empty %}
-    <p>No requests yet.</p>
+    <p class="empty-text">You haven’t made any booking requests yet.</p>
     {% endfor %}
 
+  </div>
+  <!-- ================= CONTENT END ================= -->
+
 </body>
+
 </html>

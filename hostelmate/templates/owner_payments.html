@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Payments | HostelMate</title>
+    <link rel="stylesheet" href="{% static 'css/owner_dashboard.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Hostel<span>Mate</span></div>
+
+        <div class="nav-links">
+            <a href="{% url 'owner_dashboard' %}">Dashboard</a>
+            <a href="{% url 'owner_hostels' %}">My Hostels</a>
+
+            <a href="{% url 'owner_payments' %}" class="active">Payments</a>
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <section class="card">
+            <h2>Payments</h2>
+
+            <table class="payments-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Hostel</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td>{{ p.user.username }}</td>
+                        <td>{{ p.hostel.name }}</td>
+                        <td>
+                            <span class="badge accepted">Accepted</span>
+                        </td>
+                        <td>
+                            {% if p.is_paid %}
+                            <span class="badge paid">💳 Paid</span>
+                            {% else %}
+                            <span class="badge unpaid">❌ Not Paid</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No payment records</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </section>
+    </div>
+
+</body>
+
+</html>

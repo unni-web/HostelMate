@@ -21,7 +21,7 @@
             <!-- Center Links -->
             <ul class="nav-links">
                 <li><a href="{% url 'index' %}">Find Hostels</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="../about/">About</a></li>
                 <li><a href="{% url 'user_requests' %}">Requests</a></li>
             </ul>
 
@@ -72,33 +72,52 @@
     <!-- ================= JAVASCRIPT END ================= -->
 
     <div class="detail-container">
-        
+
         <!-- IMAGE -->
         <div class="detail-image">
             <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}">
-             <!-- ACTION -->
+            <!-- ACTION -->
             <div class="action-area">
+
                 {% if user.is_authenticated %}
 
-                {% if hostel.request_status == 'pending' %}
+                {% if booking %}
+
+                {% if booking.status == 'pending' %}
                 <button class="status-btn pending">⏳ Pending</button>
 
-                {% elif hostel.request_status == 'accepted' %}
-                <button class="status-btn accepted">✅ Accepted</button>
+                {% elif booking.status == 'accepted' %}
+
+                {% if booking.is_paid %}
+                <button class="status-btn accepted">✅ Paid</button>
+                {% else %}
+                <a href="{% url 'pay_advance' booking.id %}" class="pay-btn">
+                     Pay Advance
+                </a>
+
+                {% endif %}
+
+                {% endif %}
 
                 {% else %}
+                <!-- No booking yet -->
                 <form method="POST" action="{% url 'send_request' hostel.id %}">
                     {% csrf_token %}
-                    <button class="request-btn">Request Bed</button>
+                    <button type="submit" class="request-btn">
+                        Request Bed
+                    </button>
                 </form>
                 {% endif %}
 
                 {% else %}
-                <a href="{% url 'login' %}" class="request-btn">Login to Request</a>
+                <a href="{% url 'login' %}" class="request-btn">
+                    Login to Request
+                </a>
                 {% endif %}
 
-                
             </div>
+
+
         </div>
 
         <!-- DETAILS -->
@@ -119,11 +138,10 @@
                 <span>🧹 Cleaning</span>
             </div>
 
-           
+
             <div class="map-box">
                 <iframe width="100%" height="300" frameborder="0" style="border-radius:12px" loading="lazy"
-                    allowfullscreen
-                    src="https://www.google.com/maps?q={{ hostel.location|urlencode }}&output=embed">
+                    allowfullscreen src="https://www.google.com/maps?q={{ hostel.location|urlencode }}&output=embed">
                 </iframe>
             </div>
             <div class="rating">

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Pay Advance | HostelMate</title>
+    <link rel="stylesheet" href="{% static 'css/pay.css' %}">
+</head>
+
+<body>
+
+<div class="payment-container">
+
+    <h2>Pay Advance</h2>
+
+    <div class="hostel-summary">
+        <h3>{{ booking.hostel.name }}</h3>
+        <p>📍 {{ booking.hostel.location }}</p>
+        <p>💰 Monthly Rent: ₹{{ booking.hostel.price }}</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="amount">Enter Advance Amount (₹)</label>
+        <input type="number"
+               name="amount"
+               min="100"
+               required
+               placeholder="Minimum ₹100">
+
+        <button type="submit" class="pay-btn">
+            Proceed to Payment
+        </button>
+    </form>
+
+    <a href="{% url 'hostel_detail' booking.hostel.id %}" class="back-link">
+        ← Back to Hostel
+    </a>
+
+</div>
+
+</body>
+</html>

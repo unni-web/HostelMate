@@ -21,7 +21,7 @@
             <!-- Center Links -->
             <ul class="nav-links">
                 <li><a href="../">Find Hostels</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="../about/">About</a></li>
                 <li><a href="../requests/">Requests</a></li>
             </ul>
 
@@ -71,7 +71,7 @@
     </script>
     <!-- ================= JAVASCRIPT END ================= -->
 
-    <h2  style="padding-left: 100px; padding-top: 20px; padding-bottom: 20px;" >
+    <h2 style="padding-left: 100px; padding-top: 20px; padding-bottom: 20px;">
         Results for "{{ location }}" ({{ selected_category|title }})
     </h2>
 
@@ -79,46 +79,60 @@
         <div class="hostel-grid">
 
             {% for hostel in hostels %}
-            <div class="hostel-card">
 
-                <div class="card-image">
-                    <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}">
-                    <span class="badge">{{ hostel.category|title }}</span>
-                </div>
+            <!-- CARD LINK -->
+            <a href="{% url 'hostel_detail' hostel.id %}" class="hostel-link">
 
-                <div class="card-body">
-                    <h3>{{ hostel.name }}</h3>
-                    <p class="location">📍 {{ hostel.location }}</p>
+                <div class="hostel-card">
 
-                    <div class="card-footer">
-                        <div class="price">
-                            ₹{{ hostel.price }}<span>/month</span>
-                        </div>
-
-                        {% if user.is_authenticated %}
-                        {% if hostel.request_status == 'pending' %}
-                        <button class="status-btn pending">⏳ Pending</button>
-                        {% elif hostel.request_status == 'accepted' %}
-                        <button class="status-btn accepted">✅ Accepted</button>
-                        {% else %}
-                        <form method="POST" action="{% url 'send_request' hostel.id %}">
-                            {% csrf_token %}
-                            <button class="view-btn">Request Bed</button>
-                        </form>
-                        {% endif %}
-                        {% else %}
-                        <a href="{% url 'login' %}" class="view-btn">Login</a>
-                        {% endif %}
+                    <div class="card-image">
+                        <img src="{{ hostel.image.url }}" alt="{{ hostel.name }}">
+                        <span class="badge">{{ hostel.category|title }}</span>
                     </div>
+
+                    <div class="card-body">
+                        <h3>{{ hostel.name }}</h3>
+                        <p class="location">📍 {{ hostel.location }}</p>
+
+                        <div class="card-footer">
+                            <div class="price">
+                                ₹{{ hostel.price }}<span>/month</span>
+                            </div>
+
+                            {% if user.is_authenticated %}
+                            {% if hostel.request_status == 'pending' %}
+                            <button class="status-btn pending">⏳ Pending</button>
+
+                            {% elif hostel.request_status == 'accepted' %}
+                            <button class="status-btn accepted">✅ Accepted</button>
+
+                            {% else %}
+                            <form method="POST" action="{% url 'send_request' hostel.id %}"
+                                onclick="event.stopPropagation();">
+                                {% csrf_token %}
+                                <button class="view-btn">Request Bed</button>
+                            </form>
+                            {% endif %}
+                            {% else %}
+                            <a href="{% url 'login' %}" class="view-btn" onclick="event.stopPropagation();">
+                                Login
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
                 </div>
 
-            </div>
+            </a>
+            <!-- END CARD LINK -->
+
             {% empty %}
             <p>No hostels found in this location.</p>
             {% endfor %}
 
         </div>
     </section>
+
 
 </body>
 

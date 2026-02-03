@@ -763,7 +763,7 @@ a.btn.request {
 
 /* Buttons */
 .view-btn {
-  background: #fb7185;
+  background: #14b8a6;
   color: #fff;
   border: none;
   padding: 10px 16px;
@@ -776,7 +776,7 @@ a.btn.request {
 }
 
 .view-btn:hover {
-  background: #f43f5e;
+  background: #22c55e;
 }
 
 /* Status buttons */
