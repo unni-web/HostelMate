@@ -92,7 +92,7 @@
                 <button class="status-btn accepted">✅ Paid</button>
                 {% else %}
                 <a href="{% url 'pay_advance' booking.id %}" class="pay-btn">
-                     Pay Advance
+                    Pay Advance
                 </a>
 
                 {% endif %}
@@ -148,6 +148,62 @@
                 ⭐ {{ hostel.avg_rating|floatformat:1 }}/5
                 <span>({{ hostel.reviews.count }} reviews)</span>
             </div>
+            {% if user.is_authenticated and booking and booking.is_paid %}
+            {% if not has_reviewed %}
+            <div class="review-card">
+                <h3>Leave a Review</h3>
+
+                <form method="POST" action="{% url 'add_review' hostel.id %}">
+                    {% csrf_token %}
+
+                    <div class="rating-stars">
+                        <label>
+                            <input type="radio" name="rating" value="5" required>
+                            <span>★</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="rating" value="4">
+                            <span>★</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="rating" value="3">
+                            <span>★</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="rating" value="2">
+                            <span>★</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="rating" value="1">
+                            <span>★</span>
+                        </label>
+                    </div>
+
+                    <textarea name="comment" placeholder="Share your experience..." rows="4"></textarea>
+
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
+
+            {% endif %}
+            {% endif %}
+            <div class="reviews-section">
+                <h3>User Reviews</h3>
+
+                {% for review in hostel.reviews.all %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <strong>{{ review.user.username }}</strong>
+                        <span>⭐ {{ review.rating }}/5</span>
+                    </div>
+                    <p>{{ review.comment }}</p>
+                    <small>{{ review.created_at|date:"M d, Y" }}</small>
+                </div>
+                {% empty %}
+                <p>No reviews yet. Be the first to review!</p>
+                {% endfor %}
+            </div>
+
         </div>
 
     </div>

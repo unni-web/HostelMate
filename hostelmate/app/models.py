@@ -63,10 +63,14 @@ class BookingRequest(models.Model):
 class HostelReview(models.Model):
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.PositiveIntegerField(default=5)  # 1–5
+    rating = models.PositiveIntegerField()  # 1–5
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('hostel', 'user')
+
     def __str__(self):
         return f"{self.hostel.name} - {self.rating}"
+
 

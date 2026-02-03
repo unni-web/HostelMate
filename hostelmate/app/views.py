@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg
+from django.db.models import Avg,Count
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -104,11 +104,9 @@ def logout_user(request):
 @login_required
 def owner_dashboard(request):
     if not request.user.is_staff:
-        return redirect(index)
+        return redirect('index')
 
     if request.method == 'POST':
-        image = request.FILES.get('image')  # 🔥 THIS LINE WAS MISSING
-
         Hostel.objects.create(
             owner=request.user,
             name=request.POST['name'],
@@ -116,14 +114,20 @@ def owner_dashboard(request):
             location=request.POST['location'],
             beds_available=request.POST['beds'],
             price=request.POST['price'],
-            image=image  # 🔥 PASS IMAGE HERE
+            image=request.FILES.get('image')
         )
-        print(request.FILES)
+        return redirect('owner_dashboard')
 
+    hostels = (
+        Hostel.objects
+        .filter(owner=request.user)
+        .annotate(
+            avg_rating=Avg('reviews__rating'),
+            review_count=Count('reviews')
+        )
+        .prefetch_related('reviews__user')  # 🔥 THIS WAS MISSING
+    )
 
-        return redirect(owner_dashboard)
-
-    hostels = Hostel.objects.filter(owner=request.user)
     requests = BookingRequest.objects.filter(
         hostel__owner=request.user,
         status='pending'
@@ -227,16 +231,25 @@ def hostel_detail(request, hostel_id):
     )["rating__avg"] or 0
 
     booking = None
+    has_reviewed = False
+
     if request.user.is_authenticated:
         booking = BookingRequest.objects.filter(
             hostel=hostel,
             user=request.user
         ).first()
 
+        has_reviewed = HostelReview.objects.filter(
+            hostel=hostel,
+            user=request.user
+        ).exists()
+
     return render(request, 'hostel_detail.html', {
         'hostel': hostel,
-        'booking': booking
+        'booking': booking,
+        'has_reviewed': has_reviewed,   # ✅ NEW
     })
+
 
 @login_required
 def pay_advance(request, booking_id):
@@ -326,3 +339,31 @@ def owner_requests(request):
 
 def about(request):
     return render(request, "about.html")
+
+@login_required
+def add_review(request, hostel_id):
+    hostel = Hostel.objects.get(id=hostel_id)
+
+    booking = BookingRequest.objects.filter(
+        hostel=hostel,
+        user=request.user,
+        is_paid=True
+    ).first()
+
+    # Only paid users can review
+    if not booking:
+        return redirect("hostel_detail", hostel_id=hostel.id)
+
+    # Prevent duplicate review
+    if HostelReview.objects.filter(hostel=hostel, user=request.user).exists():
+        return redirect("hostel_detail", hostel_id=hostel.id)
+
+    if request.method == "POST":
+        HostelReview.objects.create(
+            hostel=hostel,
+            user=request.user,
+            rating=request.POST["rating"],
+            comment=request.POST.get("comment", "")
+        )
+
+    return redirect("hostel_detail", hostel_id=hostel.id)

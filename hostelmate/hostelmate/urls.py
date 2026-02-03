@@ -42,6 +42,7 @@ urlpatterns = [
     path('owner/hostels/', views.owner_hostels, name='owner_hostels'),
     path('owner/requests/', views.owner_requests, name='owner_requests'),
     path("about/", views.about, name="about"),
+    path("hostel/<int:hostel_id>/review/", views.add_review, name="add_review"),
 
 
 

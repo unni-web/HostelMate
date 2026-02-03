@@ -215,3 +215,18 @@ button:hover {
 }
 
 
+.hostel-rating {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.hostel-rating span {
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.no-rating {
+    color: #aaa;
+    font-style: italic;
+}

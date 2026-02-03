@@ -331,3 +331,106 @@ body {
 .icon.white {
     fill: #fff;
 }
+
+
+.review-box, .reviews-section {
+    margin-top: 30px;
+}
+
+.review-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review-item {
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+
+
+/* ================= REVIEW FORM ================= */
+
+.review-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 30px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+}
+
+.review-card h3 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    color: #222;
+}
+
+/* ⭐ STAR RATING */
+.rating-stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+.rating-stars input {
+    display: none;
+}
+
+.rating-stars span {
+    font-size: 32px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.25s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.rating-stars label:hover span,
+.rating-stars label:hover ~ label span {
+    color: #ffc107;
+    transform: scale(1.1);
+}
+
+/* Selected stars */
+.rating-stars input:checked ~ span {
+    color: #ffc107;
+}
+
+/* COMMENT BOX */
+.review-card textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s ease;
+}
+
+.review-card textarea:focus {
+    border-color: #6c63ff;
+}
+
+/* SUBMIT BUTTON */
+.review-card button {
+    margin-top: 15px;
+    background: #20b2aa;
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(108, 99, 255, 0.35);
+}

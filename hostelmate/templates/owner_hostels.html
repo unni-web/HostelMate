@@ -1,43 +1,55 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>My Hostels</title>
     <link rel="stylesheet" href="{% static 'css/owner_dashboard.css' %}">
 </head>
+
 <body>
 
-{% include "owner_navbar.html" %}
+    {% include "owner_navbar.html" %}
 
-<div class="dashboard">
-    <section class="card">
-        <h2>My Hostels</h2>
+    <div class="dashboard">
+        <section class="card">
+            <h2>My Hostels</h2>
 
-        {% for hostel in hostels %}
-        <div class="hostel-item">
-            <img src="{{ hostel.image.url }}" class="hostel-img">
+            {% for hostel in hostels %}
+            <div class="hostel-item">
+                <img src="{{ hostel.image.url }}" class="hostel-img">
 
-            <div class="hostel-info">
-                <h3>{{ hostel.name }}</h3>
-                <p>{{ hostel.location }}</p>
-                <p>₹ {{ hostel.price }}</p>
+                <div class="hostel-info">
+                    <h3>{{ hostel.name }}</h3>
+                    <p>{{ hostel.location }}</p>
+                    <p>₹ {{ hostel.price }}</p>
+                </div>
+
+                <div class="hostel-actions">
+                    <form method="POST" action="{% url 'update_beds' hostel.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="beds" value="{{ hostel.beds_available }}">
+                        <button class="update">Update</button>
+                    </form>
+
+                    <a href="{% url 'delete_hostel' hostel.id %}" class="delete">Delete</a>
+                </div>
+            </div>
+            <div class="hostel-rating">
+                {% if hostel.review_count > 0 %}
+                ⭐ {{ hostel.avg_rating|floatformat:1 }}/5
+                <span>({{ hostel.review_count }} reviews)</span>
+                {% else %}
+                <span class="no-rating">No ratings yet</span>
+                {% endif %}
             </div>
 
-            <div class="hostel-actions">
-                <form method="POST" action="{% url 'update_beds' hostel.id %}">
-                    {% csrf_token %}
-                    <input type="number" name="beds" value="{{ hostel.beds_available }}">
-                    <button class="update">Update</button>
-                </form>
-
-                <a href="{% url 'delete_hostel' hostel.id %}" class="delete">Delete</a>
-            </div>
-        </div>
-        {% empty %}
-        <p>No hostels added yet.</p>
-        {% endfor %}
-    </section>
-</div>
+            {% empty %}
+            <p>No hostels added yet.</p>
+            {% endfor %}
+        </section>
+    </div>
 
 </body>
+
 </html>
